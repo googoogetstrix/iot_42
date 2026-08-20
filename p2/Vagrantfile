@@ -4,33 +4,21 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder ".", "/vagrant"
   
-  config.vm.define "pnamnilS" do |server|
+  config.vm.define "bworrawaS" do |server|
     server.vm.box = "generic/alpine319"
-    server.vm.hostname = "pnamnilS"
+    server.vm.hostname = "bworrawaS"
     server.vm.network "private_network", ip: "192.168.56.110"
     server.vm.provider "virtualbox" do |vb|
-      vb.name = "pnamnilS"
+      vb.name = "bworrawaS"
       vb.memory = 2048
       vb.cpus = 2
+
+      server.vm.provision "file",
+        source: "app1/",
+        destination: "/opt/app1/"
+
     end
     
     server.vm.provision "shell", name: "install-dependencies", path: "server-dependencies.sh"
-
-
   end 
-  
-
-  config.vm.define "pnamnilSW" do |sw|
-    sw.vm.box = "generic/alpine319"
-    sw.vm.hostname = "pnamnilSW"
-    sw.vm.network "private_network", ip: "192.168.56.111"
-    sw.vm.provider "virtualbox" do |vb|
-      vb.name = "pnamnilSW"
-      vb.memory = 512
-      vb.cpus = 1
-    end
-    sw.vm.provision "shell", name: "install-dependencies", path: "worker-dependencies.sh"
-  end 
-
-
 end

@@ -125,6 +125,30 @@ Setting up VMs from Vagrant and make a simple cluster of K3s Server and Agent
 
 
 
+
+
+####################### READ HERE 
+READ HERE!
+####################### READ HERE 
+
+
+HOST> docker build -t app1 ./
+
+HOST> docker run -p 3001:3000 app1
+(test on host machine)
+
+HOST> docker save app1 -o app1.tar
+(everything's ok, save the image into the file)
+
+
+
+VM> k3s ctr images import app1.tar
+// copy and register imported image
+
+
+
+
+
 --- 
 NEEDS CHECKING
 ---
@@ -330,3 +354,5 @@ https://get.k3s.io/
 
 k3s default configyuration file 
 /etc/rancher/k3s/k3s-agent.env
+
+

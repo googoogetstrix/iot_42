@@ -3,3 +3,4 @@
 p1/.vscode
 p1/shared/*
 !p1/shared/.gitkeep
+*.tar
