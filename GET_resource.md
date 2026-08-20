@@ -1,67 +1,136 @@
-portable vagrant binary [Official hashiCorp DL page](https://developer.hashicorp.com/vagrant/install)
+# Overview 
+## Vagrant - a tools for VMs
+
+A tool for automating the creation and configuration of VMs.
+
+Instead of having to do it via GUI, it's like creating a reproducable plan and setup for VMs.
+
+Traditionally, vagrant has to be installed with ```su``` privilege and since Peak refuse to install it, we need to setup it in the VM.
+
+But thankfully, there's a portable vagrant binary that you can setup without ```su``` access 
 
 
-1.) download and extract to your ```~/bin``` directory (create if you don't have one)
+### Portable Vagrant Binary
 
-2.) add the path to your own bin into ```~/.zshrc```
-
-```export PATH="$HOME/bin:$PATH"```
-
-restrat the terminal or ```source ~/.zshrc```
+    Portable vagrant binary can be downloaded from [Official hashiCorp DL page](https://developer.hashicorp.com/vagrant/install)
 
 
+        1.) download and extract to your ```~/bin``` directory (create if you don't have one)
 
-3.) setting up the test VM
-```mkdir ~/vagrant-test```
-```cd ~/vagrant-test```
-```vagrant init hashicorp/bionic64```
+        2.) add the path to your own bin into ```~/.zshrc``` using
 
-the ```hashicorp/bionic64``` is a box name (somewhat like Docker's image name)
+        ```export PATH="$HOME/bin:$PATH"```
 
-
+        3.) restrat the terminal or ```source ~/.zshrc```
 
 
-vagrant is directory based, you have to cd into where the Vagrantfile is before running the vagrant commands (like status , up , halt)
+## Vagrant Terminology & Basic Knowledge
+
+- vagrant is directory based, you have to ```cd``` into where the ```Vagrantfile``` is before running the vagrant commands .. vagrant command will try to look for VMs with such specification and run on it's own environment.
+
+- once up, it always on, consume resources until removed.
+
+### workflow
+
+Vagrant
+ ↓
+Create VM
+ ↓
+Provision VM
 
 
-### create the default Vagrantfile template
-```vagrant init BOX_NAME```
+* Network configuration usually done before provisioning
 
+BOX
 [HashiCorp Discover Vagrant Boxes] (https://portal.cloud.hashicorp.com/vagrant/discover)
 
-
-note that the BOX name starts with "generic" are publicly & regularly maintain
-
-
-### check if any VM is running under vagrant
-```vagrant status```
-
-### temporary stop the VM
-```vagrant halt```
-
-### destroy the VM and it's content
-```vagrant destroy -f```
-```vagrant ssh```
+* note that the BOX name starts with "generic" are publicly & regularly maintained
 
 
-# use this command to inspect the disk usage
-```du -sh ~/.vagrant.d/boxes/*```
-
-# to remove the bixes, use this command instead
-```vagrant box remove hashicorp/bionic64```
+* Downloaded boxes, by default, will be kept in ~/.vagrant.d/boxes/* and stay there until manually remove.(prefer ```vagrant box remove [BOX_NAME]```)
 
 
-### VM is always there unless you halt or remove them!
+PROVIDER
+    - the real virtualization software like VirtualBox
+
+PROVISION
+    - the setup
 
 
 
+
+## Kubernetes Terminology & Basic Knowledge
+
+Cluster
+Node
+Pods
+Control Plane
+Agent
+
+
+
+* Server needs more than 512MB or RAM
+or else it'll froze
+
+
+## vagrant cache
+once run the command ```vagrant up```, the command generated .vagrant/ on the current working directory, and use it to cache the stuff ... sometimes when you change the BOX_NAME and the command still not creating new VM from such BOX, you may need to run this command to clear up the cache:
+```rm -rf .vagrant```
+
+## Some useful Vagrant commands
+
+
+```vagrant init [BOX_NAME]```
+
+Create blank Vagrantfile template from ```BOX_NAME```.
+
+```vagrant status [VM_NAME]```
+
+Show status of the VM (if ```VM_NAME``` is specified) or all of the VMs.
+
+```vagrant halt [VM_NAME]```
+Temporary halt (stop - not shutting down) such VM or all if ```VM_NAME``` is not given.
+
+
+```vagrant box remove [BOX_NAME]```
+Remove downloaded box and reclaim back some spaces.
+
+```vagrant up```
+Download the boxes and start creating VMs defined in Vagrantfile.
+
+```vagrant destroy [VM_NAME] -f```
+Completely remove the VM, ```-f``` option will automatically confirm deletion.
+
+```vagrant ssh [VM_NAME]```
+Do the ssh into such VM, this by default will bypass the password since vagrant already keep the SSH keys for all of its VMs.
+
+
+
+
+# Kubernetis / K3S / kubectl
+
+
+Kubernetes is a container orchestration platform that automates deployment, scaling, networking, and recovery of containerized applications across multiple machines.
+
+K3s is a lightweight version of kubernetis. Make the whole cluster works even on low resources systems like IoT or Edge Computing.
+
+Kubectl is a CLI that can interact with Kubernetis via the Kubernetis exposed API, so you can change the running configuration without retsrating the k8s server
+
+
+####  
+Part 1 - Vagrants & K3s
+####  
+
+Setting up VMs from Vagrant and make a simple cluster of K3s Server and Agent
+
+
+
+--- 
+NEEDS CHECKING
+---
 
 ### choosing the OS
 Ubuntu 26.04
-
-
-
-
 
 "I selected Ubuntu 26.04 LTS as the operating system because it is the latest stable LTS release. The Vagrant box ecosystem is maintained separately from Ubuntu's official releases; Ubuntu does not necessarily publish a Vagrant box for every release. This box is derived from the official Ubuntu cloud image and provides a minimal server environment suitable for IoT development."
 
@@ -250,3 +319,14 @@ sudo k3s kubectl taint nodes pnamnils node-role.kubernetes.io/control-plane=true
 
 
 sudo k3s kubectl describe node pnamnils
+
+
+
+# shell script to install k3s + help
+https://get.k3s.io/
+
+
+
+
+k3s default configyuration file 
+/etc/rancher/k3s/k3s-agent.env

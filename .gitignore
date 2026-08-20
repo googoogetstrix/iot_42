@@ -1,5 +1,5 @@
 .vscode
-p1/.vagrant
+**/.vagrant
 p1/.vscode
 p1/shared/*
 !p1/shared/.gitkeep
