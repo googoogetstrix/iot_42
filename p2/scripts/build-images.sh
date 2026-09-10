@@ -10,6 +10,7 @@ if [ "$1" = "-c" ]; then
     for image in $IMAGES; do
         echo "  Removing $image:latest"
         docker image rm "$image:latest"
+        rm -f "./scripts/$image.tar"
     done
 
     echo "Cleanup complete."
@@ -20,7 +21,7 @@ echo "Building Docker images..."
 
 for image in $IMAGES; do
     echo "  Building $image:latest..."
-    docker build -t "$image:latest" "./$image"
+    docker build -t "$image:latest" "./scripts/$image"
     echo "  Created $image:latest"
 done
 
@@ -31,7 +32,7 @@ if [ "$1" = "-o" ]; then
 
     for image in $IMAGES; do
         echo "  Exporting $image:latest → $image.tar"
-        docker save "$image:latest" -o "$image.tar"
+        docker save "$image:latest" -o "./scripts/$image.tar"
         echo "  Created $image.tar"
     done
 

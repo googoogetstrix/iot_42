@@ -1,24 +1,38 @@
+images = ["app1.tar", "app2.tar", "app3.tar"]
+
+images.each do |image|
+  path = File.join(__dir__, "scripts", image)
+
+  unless File.file?(path)
+    abort "Missing required image: #{path}\n" \
+          "Run ./scripts/build-images.sh before running Vagrant."
+  end
+end
+
 Vagrant.configure("2") do |config|
-  # config.vm.box = "bento/ubuntu-24.04"
-
-
   config.vm.synced_folder ".", "/vagrant"
-  
+
   config.vm.define "bworrawaS" do |server|
     server.vm.box = "generic/alpine319"
     server.vm.hostname = "bworrawaS"
     server.vm.network "private_network", ip: "192.168.56.110"
+
     server.vm.provider "virtualbox" do |vb|
       vb.name = "bworrawaS"
       vb.memory = 2048
       vb.cpus = 2
-
-      server.vm.provision "file",
-        source: "app1/",
-        destination: "/opt/app1/"
-
     end
-    
-    server.vm.provision "shell", name: "install-dependencies", path: "server-dependencies.sh"
-  end 
+
+    # Copy the 3 images
+    images.each do |image|
+      server.vm.provision "file",
+        source: File.join(__dir__, "scripts", image),
+        destination: "/tmp/#{image}"
+    end
+
+    # Install dependencies
+    server.vm.provision "shell",
+      name: "install-dependencies",
+      path: "scripts/server-install.sh"
+  end
 end
