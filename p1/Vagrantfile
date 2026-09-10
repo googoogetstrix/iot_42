@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
       vb.cpus = 2
     end
     
-    server.vm.provision "shell", name: "install-dependencies", path: "server-dependencies.sh"
+    server.vm.provision "shell", name: "install-dependencies", path: "scripts/server-install.sh"
 
 
   end 
@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
       vb.memory = 512
       vb.cpus = 1
     end
-    sw.vm.provision "shell", name: "install-dependencies", path: "worker-dependencies.sh"
+    sw.vm.provision "shell", name: "install-dependencies", path: "scripts/worker-install.sh"
   end 
 
 

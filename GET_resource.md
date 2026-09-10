@@ -21,7 +21,7 @@ But thankfully, there's a portable vagrant binary that you can setup without ```
 
         ```export PATH="$HOME/bin:$PATH"```
 
-        3.) restrat the terminal or ```source ~/.zshrc```
+        3.) restart the terminal or ```source ~/.zshrc```
 
 
 ## Vagrant Terminology & Basic Knowledge
@@ -32,17 +32,12 @@ But thankfully, there's a portable vagrant binary that you can setup without ```
 
 ### workflow
 
-Vagrant
- ↓
-Create VM
- ↓
-Provision VM
+Vagrant > Create VM > Provision VM
 
 
 * Network configuration usually done before provisioning
 
-BOX
-[HashiCorp Discover Vagrant Boxes] (https://portal.cloud.hashicorp.com/vagrant/discover)
+BOX - see [HashiCorp Discover Vagrant Boxes](https://portal.cloud.hashicorp.com/vagrant/discover)
 
 * note that the BOX name starts with "generic" are publicly & regularly maintained
 
@@ -123,6 +118,28 @@ Part 1 - Vagrants & K3s
 
 Setting up VMs from Vagrant and make a simple cluster of K3s Server and Agent
 
+
+
+
+
+
+
+2026-09-10
+
+sudo k3s kubectl apply -f path-to-config.yaml
+
+
+> sudo -i
+change to root so you don't have to sudo every time
+
+
+sudo k3s kubectl get pods -o wide
+sudo k3s kubectl get services
+sudo k3s ctr images list
+
+
+
+k3s kubectl get deployments
 
 
 
